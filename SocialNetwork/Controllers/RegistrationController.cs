@@ -23,8 +23,11 @@ namespace SocialNetwork.Controllers
         {
             var response = new Response();
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString ("Connstring").ToString ());
-                
+            DAL dal = new DAL();
+            dal.Registration (registration , conn);
+            
             return response;
         }
+        
     }
 }
