@@ -28,6 +28,27 @@ namespace SocialNetwork.Controllers
             
             return response;
         }
-        
+        [HttpPost]
+        [Route("Login")]
+        public Response Login (Registration registration)
+        {
+            var response = new Response();
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("Connstring").ToString());
+            DAL dal = new DAL();
+            dal.Login(registration, conn);
+
+            return response;
+
+        }
+        [HttpPost ]
+        [Route ("UserApproval")]
+        public Response UserApproval (Registration registration)
+        {
+            var response = new Response();
+            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("Connstring").ToString());
+            DAL dal = new DAL();
+            dal.UserApproval (registration, connection);
+            return response;
+        }
     }
 }

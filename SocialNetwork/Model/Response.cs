@@ -8,7 +8,7 @@
         public List<Registration> lstRegistration {  get; set; }
         public List<Article > articles { get; set; }
         public List <Event > events { get; set; }
-        public List<News > news { get; set; }
+        public List<News > Listnews { get; set; }
         
     }
 }
