@@ -165,6 +165,14 @@ namespace SocialNetwork.Model
         {
             Response response = new Response();
             SqlDataAdapter da = null;
+            if(article.type == "User")
+            {
+                da = new SqlDataAdapter("SELECT * FROM  Article WHERE Email ='"+article.Email +"' AND IsActive =1",connection );
+            }
+            if(article.type == "Page")
+            {
+                da= new SqlDataAdapter("SELECT * FROM  Article ", connection);
+            }
             DataTable dt = new DataTable();
             da.Fill(dt);
             List<Article > listArticles = new List<Article>();
@@ -172,28 +180,27 @@ namespace SocialNetwork.Model
             {
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    
+                    article = new Article();
                     article.Id = Convert.ToInt32(dt.Rows[i]["ID"]);
                     article.Title = Convert.ToString(dt.Rows[i]["Title"]);
                     article.Content = Convert.ToString(dt.Rows[i]["Content"]);
                     article.IsActive = Convert.ToInt32(dt.Rows[i]["IsActive"]);
                     article.Email = Convert.ToString(dt.Rows[i]["Email"]);
+                    article.Image = Convert.ToString(dt.Rows[i]["Image"]);
 
                     listArticles.Add(article);
                 }
                 if (listArticles.Count > 0)
                 {
-                   
-
                     response.Statuscode = 200;
-                    response.StatusMessag = "News data found";
-
+                    response.StatusMessag = "Article  data found";
+                    response.articles = listArticles;
                 }
                 else
                 {
-                    response.Listnews = null;
+                    response.articles = null;
                     response.Statuscode = 100;
-                    response.StatusMessag = "News data not found";
+                    response.StatusMessag = "Article  data not found";
                 }
 
             }
@@ -201,12 +208,141 @@ namespace SocialNetwork.Model
             {
                 response.Listnews = null;
                 response.Statuscode = 100;
-                response.StatusMessag = "News data not found";
+                response.StatusMessag = "Article data not found";
             }
             return response;
 
         }
+        public Response ArticleApproval(Article article, SqlConnection connection)
+        {
+            Response response = new Response();
+            SqlCommand cmd = new SqlCommand("update Article set IsApproved = 1 where ID = '" + article.Id + "' And IsActive =1", connection);
+            connection.Open();
+            int i = cmd.ExecuteNonQuery();
+            connection .Close();
+            if (i > 0)
+            {
+                response.Statuscode = 200;
+                response.StatusMessag = "Article approval Sucessful";
+            }
+            else
+            {
+                response.Statuscode = 100;
+                response.StatusMessag = "Article Approval failed";
+            }
+            return response;
+        }
+        public Response StaffRegistration(Staff staff, SqlConnection connection)
 
+        {
+            var response = new Response();
+            SqlCommand command = new SqlCommand("INSERT INTO Staff(Name,Email," +
+                "password,IsActive)VALUES" +
+                "('" + staff.Name + "','" + staff.Email+ "','" + staff.Password + "',1)");
+            connection.Open();
+            int i = command.ExecuteNonQuery();
+            connection.Close();
+            if (i > 0)
+            {
+                response.Statuscode = 200;
+                response.StatusMessag = "Staff sucessfully Registered";
+            }
+            else
+            {
+                response.Statuscode = 100;
+                response.StatusMessag = "Staff Registration failed";
+            }
+
+            return response;
+        }
+        public Response DeleteStaff(Staff staff, SqlConnection connection)
+
+        {
+            var response = new Response();
+            SqlCommand command = new SqlCommand("Delete from staff where ID =1 and IsActive =1",connection );
+            connection.Open();
+            int i = command.ExecuteNonQuery();
+            connection.Close();
+            if (i > 0)
+            {
+                response.Statuscode = 200;
+                response.StatusMessag = "Staff sucessfully Deleted";
+            }
+            else
+            {
+                response.Statuscode = 100;
+                response.StatusMessag = "Staff Deletion failed";
+            }
+
+            return response;
+        }
+        public Response AddEvent(Event even , SqlConnection connection)
+        {
+            Response response = new Response();
+            SqlCommand cmd = new SqlCommand("Insert into Event(Title, Content,Email,IsActive,)Values('" + even.Title + "','" + even .Content + "','" + even.Email + "',1,'"+even.CreatedOn+"'", connection);
+
+            connection.Open();
+            int i = cmd.ExecuteNonQuery();
+            connection.Close();
+            if (i > 0)
+            {
+                response.Statuscode = 200;
+                response.StatusMessag = "Event Creation sucessful";
+
+            }
+            else
+            {
+                response.Statuscode = 100;
+                response.StatusMessag = "Event creation failed";
+            }
+            return response;
+        }
+        public Response EventList( SqlConnection connection)
+        {
+            Response response = new Response();
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM  Event Where IsActive =1", connection);  
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            List<Event> listEvent = new List<Event>();
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Event @event = new Event();
+
+                    @event.Id = Convert.ToInt32(dt.Rows[i]["ID"]);
+                    @event.Title = Convert.ToString(dt.Rows[i]["Title"]);
+                    @event.Content = Convert.ToString(dt.Rows[i]["Content"]);
+                    @event.IsActive = Convert.ToInt32(dt.Rows[i]["IsActive"]);
+                    @event.Email = Convert.ToString(dt.Rows[i]["Email"]);
+                    @event.CreatedOn = Convert.ToDateTime(dt.Rows[i]["CreatedOn"]);
+                    
+
+                    listEvent.Add(@event);
+                }
+                if (listEvent.Count > 0)
+                {
+                    response.Statuscode = 200;
+                    response.StatusMessag = "Event  data found";
+                    response.events = listEvent;
+                }
+                else
+                {
+                    response.events = null;
+                    response.Statuscode = 100;
+                    response.StatusMessag = "Event  data not found";
+                }
+
+            }
+            else
+            {
+                response.Listnews = null;
+                response.Statuscode = 100;
+                response.StatusMessag = "Event data not found";
+            }
+            return response;
+
+        }
     }
 }
 

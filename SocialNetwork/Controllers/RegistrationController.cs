@@ -50,5 +50,27 @@ namespace SocialNetwork.Controllers
             dal.UserApproval (registration, connection);
             return response;
         }
+        [HttpPost]
+        [Route("StaffRegistration")]
+        public Response StaffRegistration(Staff staff)
+        {
+            var response = new Response();
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("Connstring").ToString());
+            DAL dal = new DAL();
+            dal.StaffRegistration(staff, conn);
+
+            return response;
+        }
+        [HttpPost]
+        [Route("DeleteStaff")]
+        public Response DeleteStaff(Staff staff)
+        {
+            var response = new Response();
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("Connstring").ToString());
+            DAL dal = new DAL();
+            dal.DeleteStaff(staff, conn);
+
+            return response;
+        }
     }
 }

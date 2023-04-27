@@ -7,44 +7,35 @@ namespace SocialNetwork.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArticleController : ControllerBase
+    public class EventsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public ArticleController(IConfiguration configuration)
+        public EventsController(IConfiguration configuration)
         {
 
             _configuration = configuration;
 
         }
-        [HttpPost ]
-       [Route("AddArticle")]
-        public Response AddArticle(Article article)
+        [HttpPost]
+        [Route("AddEvents")]
+        public Response AddEvents(Event _event)
         {
             var response = new Response();
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("Connstring").ToString());
             DAL dal = new DAL();
-            dal.AddArticle(article, conn);
+            dal.AddEvent(_event, conn);
 
             return response;
         }
-        [HttpPost ]
-        [Route ("ListArticle")]
-        public Response ListArticle(Article article)
+        [HttpGet]
+        [Route("EventsList")]
+        public Response EventsList()
         {
             var response = new Response();
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("Connstring").ToString());
             DAL dal = new DAL();
-            dal.ArticleList(article, conn);
-            return response;
-        }
-        [HttpPost]
-        [Route("ArticleApproval")]
-        public Response ArticleApproval(Article article)
-        {
-            var response = new Response();
-            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("Connstring").ToString());
-            DAL dal = new DAL();
-            dal.ArticleApproval(article, connection);
+            dal.EventList(conn);
+
             return response;
         }
     }
