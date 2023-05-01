@@ -11,7 +11,7 @@ namespace SocialNetwork.Model
             SqlCommand command = new SqlCommand("INSERT INTO REGISTRATION1(Name,Email," +
                 "PhoneNo,password,IsActive,IsApproved)VALUES" +
                 "('"+registration.Name+"','"+registration.Email
-                +"','"+registration.PhoneNo  +"','"+registration.Password +"',1,0)");
+                +"','"+registration.PhoneNo  +"','"+registration.Password +"',1,0)",connection);
             connection.Open();
             int i = command.ExecuteNonQuery();
             connection.Close();
@@ -143,11 +143,11 @@ namespace SocialNetwork.Model
         public Response AddArticle(Article article, SqlConnection connection)
         {
             Response response = new Response();
-            SqlCommand cmd = new SqlCommand("Insert into Article(Title, Content,Email,Image,IsActive,IsApproved)Values('" + article .Title + "','" + article .Content + "','" + article .Email + "','"+ article.Image + "',1,0",connection );
+            SqlCommand cmd = new SqlCommand("Insert into Article(Title, Content,Email,Image,IsActive,IsApproved)Values('" + article .Title + "','" + article .Content + "','" + article .Email + "','"+ article.Image + "',1,0)",connection );
 
             connection.Open();
             int i = cmd.ExecuteNonQuery();
-            connection.Close();
+            //connection.Close();
             if (i > 0)
             {
                 response.Statuscode = 200;
